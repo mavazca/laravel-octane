@@ -1,4 +1,4 @@
-name: pull requests
+name: 3 - pull requests
 
 on:
   pull_request_target:
