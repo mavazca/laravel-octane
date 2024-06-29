@@ -1,4 +1,4 @@
-name: tests
+name: Execute Tests
 
 on:
   workflow_call:
@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 jobs:
-  tests:
+  run-tests:
     runs-on: ubuntu-latest
 
     strategy:
@@ -15,27 +15,27 @@ jobs:
       matrix:
         php: [8.2, 8.3]
 
-    name: PHP ${{ matrix.php }}
+    name: Run Tests on PHP ${{ matrix.php }}
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup PHP
+      - name: Setup PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
           coverage: none
 
-      - name: Install Composer dependencies
+      - name: Install Composer Dependencies
         run: cd app && composer install --prefer-dist --no-interaction --no-progress
 
-      - name: Copy environment file
+      - name: Copy Environment File
         run: cd app && cp .env.example .env
 
-      - name: Generate app key
+      - name: Generate App Key
         run: cd app && php artisan key:generate
 
-      - name: Execute tests
+      - name: Run PHPUnit Tests
         run: cd app && vendor/bin/phpunit
