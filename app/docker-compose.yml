@@ -7,6 +7,7 @@ services:
             context: ./docker/8.3
             dockerfile: Dockerfile
         restart: unless-stopped
+        image: my-app:latest
         ports:
             - '8989:80'
         working_dir: /var/www/

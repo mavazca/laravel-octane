@@ -1,0 +1,28 @@
+name: Prod Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  prod-tests:
+    uses: ./.github/workflows/tests.yml
+
+  prod-terraform:
+    needs: prod-tests
+    uses: ./.github/workflows/terraform.yml
+    with:
+      environment: prod
+      aws-assume-role-arn: arn:aws:iam::590183822115:role/github-actions-mavazca-pipeline
+      aws-region: us-east-1
+      aws-statefile-s3-bucket: celaummm-us-east-1-terraform-statefile
+      aws-lock-dynamodb-table: celaummm-us-east-1-terraform-lock
+      ecr-repository: prod-us-east-1-laravel-octane-repository
+      ecs-cluster: ecs-cluster-laravel-octane
+      ecs-service: laravel-octane-service
