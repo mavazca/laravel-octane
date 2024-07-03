@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - develop
+  workflow_dispatch:
 
 permissions:
   id-token: write
@@ -16,7 +16,7 @@ jobs:
 
   prod-terraform:
     needs: prod-tests
-    uses: ./.github/workflows/terraform-deploy.yml
+    uses: ./.github/workflows/terraform.yml
     with:
       environment: prod
       aws-assume-role-arn: arn:aws:iam::590183822115:role/github-actions-mavazca-pipeline
